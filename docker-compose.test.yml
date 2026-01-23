@@ -1,0 +1,16 @@
+---
+version: "2"
+services:
+  matrix-test:
+    image: geerlingguy/docker-ubuntu2204-ansible:latest
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    privileged: true
+    command: >
+      sh -c "
+        apt-get update &&
+        apt-get install -y python3-pip &&
+        pip3 install ansible ansible-lint &&
+        ansible-playbook -i localhost, ansible_matrix_messenger/site.yml --connection=local --verbose
+      "
