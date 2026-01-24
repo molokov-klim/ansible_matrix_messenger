@@ -4,27 +4,24 @@ driver:
   name: docker
 platforms:
   - name: matrix-test
-    image: geerlingguy/docker-ubuntu2204-ansible:latest
+    image: ubuntu:22.04
     pre_build_image: true
-    privileged: true
-    command: /lib/systemd/systemd
+    command: >
+      bash -c "apt-get update && 
+      apt-get install -y python3 python3-apt sudo bash ca-certificates &&
+      tail -f /dev/null"
+    privileged: false
     volumes:
-      - /sys/fs/cgroup:/sys/fs/cgroup:ro
-    tmpfs:
-      - /run
-      - /tmp
-    capabilities:
-      - SYS_ADMIN
-    security_opts:
-      - seccomp=unconfined
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+    cgroupns_mode: host
     groups:
       - matrix_servers
 provisioner:
   name: ansible
   config_options:
     defaults:
-      remote_tmp: /tmp/.ansible/tmp
       interpreter_python: auto_silent
+      host_key_checking: false
       callback_whitelist: profile_tasks
   env:
     ANSIBLE_HOST: "localhost"
@@ -36,8 +33,7 @@ provisioner:
   inventory:
     group_vars:
       matrix_servers:
-        ansible_user: root
-        ansible_connection: docker
+        ansible_connection: community.docker.docker
         domain_name: "matrix.test"
         admin_username: "admin"
         admin_email: "admin@test.com"

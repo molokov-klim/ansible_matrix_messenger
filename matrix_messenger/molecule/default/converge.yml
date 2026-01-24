@@ -1,7 +1,6 @@
 ---
 - name: Converge
   hosts: all
-  become: yes
   gather_facts: yes
   vars:
     # Переменные для тестового окружения
@@ -10,24 +9,16 @@
     # Флаг что мы в тестовом окружении
     molecule_test: true
     
-  pre_tasks:
-    - name: Wait for systemd to be ready
-      wait_for:
-        path: /run/systemd/system
-        state: present
-        timeout: 30
-      ignore_errors: yes
-        
-    - name: Update apt cache
-      apt:
-        update_cache: yes
-        cache_valid_time: 3600
-      register: apt_update
-      retries: 3
-      delay: 5
-      until: apt_update is success
-      
   tasks:
-    - name: Test - just verify we can connect
+    - name: Test - just verify we can connect and gather facts
       debug:
-        msg: "Successfully connected to {{ inventory_hostname }}"
+        msg: "Successfully connected to {{ inventory_hostname }} running {{ ansible_distribution }} {{ ansible_distribution_version }}"
+        
+    - name: Test - check we can run commands
+      command: whoami
+      register: whoami_result
+      changed_when: false
+      
+    - name: Display current user
+      debug:
+        msg: "Current user: {{ whoami_result.stdout }}"
