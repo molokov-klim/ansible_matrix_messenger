@@ -29,7 +29,7 @@ jobs:
         echo "ansible_password=${{ secrets.ANSIBLE_PASSWORD }}" >> inventory/production.ini
         echo "ansible_become_pass=${{ secrets.ANSIBLE_PASSWORD }}" >> inventory/production.ini
         echo "ansible_connection=ssh" >> inventory/production.ini
-        echo "ansible_ssh_common_args='-o StrictHostKeyChecking=no'" >> inventory/production.ini
+        echo "ansible_ssh_common_args='-o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no'" >> inventory/production.ini
 
     - name: Create .env file with secrets
       run: |
