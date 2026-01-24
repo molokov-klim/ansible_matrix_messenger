@@ -10,10 +10,22 @@ platforms:
     command: /lib/systemd/systemd
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    tmpfs:
+      - /run
+      - /tmp
+    capabilities:
+      - SYS_ADMIN
+    security_opts:
+      - seccomp=unconfined
     groups:
       - matrix_servers
 provisioner:
   name: ansible
+  config_options:
+    defaults:
+      remote_tmp: /tmp/.ansible/tmp
+      interpreter_python: auto_silent
+      callback_whitelist: profile_tasks
   env:
     ANSIBLE_HOST: "localhost"
     ANSIBLE_USER: "root"
@@ -25,6 +37,7 @@ provisioner:
     group_vars:
       matrix_servers:
         ansible_user: root
+        ansible_connection: docker
         domain_name: "matrix.test"
         admin_username: "admin"
         admin_email: "admin@test.com"
