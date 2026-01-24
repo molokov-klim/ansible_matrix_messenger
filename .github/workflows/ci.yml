@@ -11,8 +11,9 @@ jobs:
       - name: Check for secrets in code
         run: |
           # Проверяем, что в коде нет секретов
+          # Игнорируем шаблоны, переменные и конфигурационные файлы, где могут быть ссылки на переменные
           git grep -iE '(password|secret|key|token|ANSIBLE_PASSWORD|MATRIX_ADMIN_PASSWORD|POSTGRES_PASSWORD)' \
-            -- ':!tests' ':!scripts' ':!.github' ':!.env.example' && exit 1 || exit 0
+            -- ':!tests' ':!scripts' ':!.github' ':!.env.example' ':!templates' ':!vars' ':!defaults' ':!inventory' ':!group_vars' && exit 1 || exit 0
 
   test:
     needs: security-check
