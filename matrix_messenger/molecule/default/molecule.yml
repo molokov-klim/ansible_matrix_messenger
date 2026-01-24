@@ -15,6 +15,11 @@ provisioner:
       matrix_servers:
         ansible_user: root
         domain_name: "matrix.test"
+        admin_username: "admin"
+        matrix_db_name: "synapse"
+        matrix_db_user: "synapse_user"
+        matrix_db_password: "test_db_password"
+        admin_email: "admin@test.com"
 verifier:
   name: testinfra
 scenario:
