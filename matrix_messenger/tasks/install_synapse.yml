@@ -5,15 +5,16 @@
     path: /etc/apt/sources.list.d/matrix-org.list
     state: absent
 
-- name: Add Matrix.org repository key
-  apt_key:
+- name: Download Matrix.org repository key
+  get_url:
     url: https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg
-    id: 0EE6C3FB3A1F29BC2A67F78D226CF1D1C56D2C1E
-    state: present
+    dest: /etc/apt/trusted.gpg.d/matrix-org-archive-keyring.gpg
+    mode: '0644'
+    force: yes
 
 - name: Add Matrix.org repository
   apt_repository:
-    repo: deb https://packages.matrix.org/debian/ {{ ansible_distribution_release }} main
+    repo: deb [signed-by=/etc/apt/trusted.gpg.d/matrix-org-archive-keyring.gpg] https://packages.matrix.org/debian/ {{ ansible_distribution_release }} main
     state: present
     filename: matrix-org
     codename: "{{ ansible_distribution_release }}"
