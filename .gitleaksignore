@@ -1,2 +1,4 @@
 matrix_messenger/inventory.ini
 **/inventory.ini
+matrix_messenger/examples/staging.inventory.ini
+matrix_messenger/examples/production.inventory.ini

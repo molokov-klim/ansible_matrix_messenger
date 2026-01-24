@@ -6,5 +6,6 @@ paths = [
   "**/inventory.ini",
   "**/inventory/*.ini",
   "**/inventory/*.yml",
-  "**/inventory/*.yaml"
+  "**/inventory/*.yaml",
+  "**/examples/*inventory.ini"
 ]
