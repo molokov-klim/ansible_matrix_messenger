@@ -1,0 +1,14 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    # Заглушка для переменных, которые будут определены в будущем
+    domain_name: "{{ lookup('env', 'DOMAIN_NAME') | default('matrix.test') }}"
+    admin_email: "{{ lookup('env', 'ADMIN_EMAIL') | default('admin@test.com') }}"
+  pre_tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+  roles:
+    - role: ../../

@@ -1,0 +1,6 @@
+---
+- name: Setup Matrix Messenger
+  hosts: matrix_servers
+  become: yes
+  roles:
+    - matrix_messenger

@@ -1,0 +1,21 @@
+dependency:
+  name: galaxy
+driver:
+  name: docker
+platforms:
+  - name: matrix-test
+    image: geerlingguy/docker-ubuntu2204-ansible:latest
+    pre_build_image: true
+    groups:
+      - matrix_servers
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      matrix_servers:
+        ansible_user: root
+        domain_name: "matrix.test"
+verifier:
+  name: testinfra
+scenario:
+  name: default
