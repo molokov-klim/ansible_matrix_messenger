@@ -1,0 +1,15 @@
+# .env.staging
+# Переменные для staging окружения
+
+# Доступ к серверу
+ANSIBLE_HOST=staging.matrix.example.com
+ANSIBLE_USER=ubuntu
+ANSIBLE_PASSWORD=staging_password_here
+
+# Пароли для Matrix
+MATRIX_ADMIN_PASSWORD=staging_admin_password
+POSTGRES_PASSWORD=staging_db_password
+
+# Дополнительные переменные для staging
+DOMAIN_NAME=staging.matrix.example.com
+ADMIN_EMAIL=admin@staging.example.com

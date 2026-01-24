@@ -1,0 +1,15 @@
+# .env.production
+# Переменные для production окружения
+
+# Доступ к серверу
+ANSIBLE_HOST=matrix.example.com
+ANSIBLE_USER=ubuntu
+ANSIBLE_PASSWORD=production_password_here
+
+# Пароли для Matrix
+MATRIX_ADMIN_PASSWORD=production_admin_password
+POSTGRES_PASSWORD=production_db_password
+
+# Дополнительные переменные для production
+DOMAIN_NAME=matrix.example.com
+ADMIN_EMAIL=admin@example.com
