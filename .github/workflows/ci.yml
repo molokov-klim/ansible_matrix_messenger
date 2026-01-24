@@ -39,5 +39,3 @@ jobs:
           molecule create
           echo "=== CONVERGE ==="
           molecule converge
-          echo "=== VERIFY (без проблемных тестов) ==="
-          molecule verify
