@@ -26,6 +26,8 @@ jobs:
         echo "" >> inventory/production.ini
         echo "[matrix_servers:vars]" >> inventory/production.ini
         echo "ansible_user=${{ secrets.ANSIBLE_USER }}" >> inventory/production.ini
+        echo "ansible_password=${{ secrets.ANSIBLE_PASSWORD }}" >> inventory/production.ini
+        echo "ansible_become_pass=${{ secrets.ANSIBLE_PASSWORD }}" >> inventory/production.ini
         echo "ansible_connection=ssh" >> inventory/production.ini
         echo "ansible_ssh_common_args='-o StrictHostKeyChecking=no'" >> inventory/production.ini
 
