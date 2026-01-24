@@ -9,9 +9,14 @@ listeners:
     x_forwarded: true
 
 database:
-  name: sqlite3
+  name: psycopg2
   args:
-    database: /var/lib/matrix-synapse/homeserver.db
+    user: {{ matrix_db_user }}
+    password: {{ matrix_db_password }}
+    database: {{ matrix_db_name }}
+    host: localhost
+    cp_min: 5
+    cp_max: 10
 
 media_store_path: /var/lib/matrix-synapse/media
 uploads_path: /var/lib/matrix-synapse/uploads

@@ -7,8 +7,14 @@ DB_NAME="{{ matrix_db_name }}"
 DB_USER="{{ matrix_db_user }}"
 DB_PASS="{{ matrix_db_password }}"
 
+# Устанавливаем пароль для неинтерактивного выполнения
+export PGPASSWORD="$DB_PASS"
+
 # Создаем резервную копию базы данных
 pg_dump -h localhost -U "$DB_USER" -d "$DB_NAME" > "$BACKUP_DIR/synapse_$DATE.sql"
+
+# Очищаем переменную окружения с паролем
+unset PGPASSWORD
 
 # Удаляем резервные копии старше 7 дней
 find $BACKUP_DIR -name "synapse_*.sql" -mtime +7 -delete

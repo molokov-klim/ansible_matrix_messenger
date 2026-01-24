@@ -42,21 +42,42 @@ POSTGRES_PASSWORD=еще_один_надежный_пароль
 ```
 
 ## Установка
-1. Скопируйте `.env.example` в `.env` и заполните своими значениями:
+
+### Шаг 1: Подготовка конфигурационных файлов
+
+1. Скопируйте `env.example` в `.env` и заполните своими значениями:
    ```bash
-   cp .env.example .env
+   cp env.example .env
    nano .env
    ```
 
-2. Загрузите переменные окружения:
+2. Скопируйте `inventory.ini.example` в `inventory.ini` и укажите адрес вашего сервера:
    ```bash
-   make load-env
+   cp inventory.ini.example inventory.ini
+   nano inventory.ini
    ```
 
-3. Запустите установку:
-   ```bash
-   make deploy
-   ```
+### Шаг 2: Загрузите переменные окружения
+
+```bash
+source scripts/load_env.sh
+```
+
+Или используйте Makefile:
+```bash
+make load-env
+```
+
+### Шаг 3: Запустите установку
+
+```bash
+make deploy
+```
+
+Или напрямую через ansible-playbook:
+```bash
+ansible-playbook -i inventory.ini site.yml
+```
 
 ## Безопасность
 - Все чувствительные данные хранятся в .env файле (не коммитится)

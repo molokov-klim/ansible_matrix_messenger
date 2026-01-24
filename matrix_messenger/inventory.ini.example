@@ -1,0 +1,23 @@
+[matrix_servers]
+# Замените на IP адрес или hostname вашего сервера
+# Примеры:
+#   192.168.1.100
+#   matrix.molokov
+#   your-server.com
+localhost
+
+[matrix_servers:vars]
+# Пользователь на сервере (обычно ubuntu, root, или ваш пользователь)
+ansible_user=root
+
+# Ansible будет брать пароль из переменной окружения ANSIBLE_PASSWORD
+# Убедитесь, что вы загрузили .env файл через: source .env
+ansible_password="{{ lookup('env', 'ANSIBLE_PASSWORD') }}"
+
+# Настройки подключения
+ansible_connection=ssh
+ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
+# Альтернатива: использовать SSH ключ (более безопасно для production)
+# ansible_ssh_private_key_file=~/.ssh/id_rsa
+# ansible_password закомментировать в этом случае

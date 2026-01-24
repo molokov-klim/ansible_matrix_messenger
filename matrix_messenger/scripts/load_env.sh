@@ -1,13 +1,17 @@
 #!/bin/bash
 set -e
 
-ENV_FILE=".env.test"
+ENV_FILE=".env"
 
 if [ ! -f "$ENV_FILE" ]; then
     echo "❌ Файл $ENV_FILE не найден!"
-    echo "👉 Скопируй .env.example в .env и заполни своими значениями:"
-    echo "   cp .env.example .env"
+    echo "👉 Скопируй env.example в .env и заполни своими значениями:"
+    echo "   cp env.example .env"
     echo "   nano .env"
+    echo ""
+    echo "Также не забудь скопировать inventory.ini.example:"
+    echo "   cp inventory.ini.example inventory.ini"
+    echo "   nano inventory.ini"
     exit 1
 fi
 

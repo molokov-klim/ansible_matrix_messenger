@@ -1,29 +1,25 @@
 ---
 # tasks/integrate_postgres_with_synapse.yml
-- name: Update Synapse configuration to use PostgreSQL
-  lineinfile:
-    path: /etc/matrix-synapse/homeserver.yaml
-    regexp: '^database:'
-    line: |
-      database:
-        name: psycopg2
-        args:
-          user: {{ matrix_db_user }}
-          password: {{ matrix_db_password }}
-          database: {{ matrix_db_name }}
-          host: localhost
-          cp_min: 5
-          cp_max: 10
-    backup: yes
-  notify: Restart Synapse
+- name: Find PostgreSQL pg_hba.conf file
+  find:
+    paths: /etc/postgresql
+    patterns: pg_hba.conf
+    recurse: yes
+  register: pg_hba_files
 
 - name: Ensure Synapse has correct permissions for PostgreSQL
   lineinfile:
-    path: /etc/postgresql/*/main/pg_hba.conf
-    line: 'host matrix_synapse {{ matrix_db_user }} 127.0.0.1/32 md5'
-    regexp: '^host matrix_synapse {{ matrix_db_user }} 127.0.0.1/32 md5'
+    path: "{{ pg_hba_files.files[0].path }}"
+    line: 'host {{ matrix_db_name }} {{ matrix_db_user }} 127.0.0.1/32 md5'
+    regexp: '^host {{ matrix_db_name }} {{ matrix_db_user }} 127.0.0.1/32'
     backup: yes
+  when: pg_hba_files.files | length > 0
   notify: Restart PostgreSQL
+
+- name: Install psycopg2 Python library for PostgreSQL
+  apt:
+    name: python3-psycopg2
+    state: present
 
 - name: Restart PostgreSQL to apply changes
   systemd:
