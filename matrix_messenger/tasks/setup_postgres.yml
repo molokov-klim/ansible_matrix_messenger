@@ -1,0 +1,44 @@
+---
+# tasks/setup_postgres.yml
+- name: Install PostgreSQL packages
+  apt:
+    name:
+      - postgresql
+      - postgresql-contrib
+      - libpq-dev
+    state: present
+
+- name: Start and enable PostgreSQL service
+  systemd:
+    name: postgresql
+    state: started
+    enabled: yes
+
+- name: Create Synapse database user
+  become: yes
+  become_user: postgres
+  postgresql_user:
+    name: "{{ matrix_db_user }}"
+    password: "{{ matrix_db_password }}"
+    role_attr_flags: LOGIN
+    encrypted: yes
+
+- name: Create Synapse database
+  become: yes
+  become_user: postgres
+  postgresql_db:
+    name: "{{ matrix_db_name }}"
+    owner: "{{ matrix_db_user }}"
+    encoding: UTF-8
+    lc_collate: en_US.UTF-8
+    lc_ctype: en_US.UTF-8
+    template: template0
+
+- name: Grant privileges to Synapse user
+  become: yes
+  become_user: postgres
+  postgresql_privs:
+    database: "{{ matrix_db_name }}"
+    roles: "{{ matrix_db_user }}"
+    privs: ALL
+    type: database

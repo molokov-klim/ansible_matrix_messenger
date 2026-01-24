@@ -1,0 +1,31 @@
+---
+# tasks/integrate_postgres_with_synapse.yml
+- name: Update Synapse configuration to use PostgreSQL
+  lineinfile:
+    path: /etc/matrix-synapse/homeserver.yaml
+    regexp: '^database:'
+    line: |
+      database:
+        name: psycopg2
+        args:
+          user: {{ matrix_db_user }}
+          password: {{ matrix_db_password }}
+          database: {{ matrix_db_name }}
+          host: localhost
+          cp_min: 5
+          cp_max: 10
+    backup: yes
+  notify: Restart Synapse
+
+- name: Ensure Synapse has correct permissions for PostgreSQL
+  lineinfile:
+    path: /etc/postgresql/*/main/pg_hba.conf
+    line: 'host matrix_synapse {{ matrix_db_user }} 127.0.0.1/32 md5'
+    regexp: '^host matrix_synapse {{ matrix_db_user }} 127.0.0.1/32 md5'
+    backup: yes
+  notify: Restart PostgreSQL
+
+- name: Restart PostgreSQL to apply changes
+  systemd:
+    name: postgresql
+    state: restarted

@@ -1,0 +1,5 @@
+---
+# vars/main.yml
+matrix_db_name: "synapse"
+matrix_db_user: "synapse_user"
+matrix_db_password: "{{ lookup('env', 'POSTGRES_PASSWORD') | default('default_password_for_testing') }}"

@@ -1,3 +1,5 @@
 ---
 # tasks file for matrix_messenger
 - import_tasks: install_synapse.yml
+- import_tasks: setup_postgres.yml
+- import_tasks: integrate_postgres_with_synapse.yml
