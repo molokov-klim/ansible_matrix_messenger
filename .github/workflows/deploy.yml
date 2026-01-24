@@ -40,15 +40,10 @@ jobs:
     - name: Create vault password file
       run: |
         echo "${{ secrets.VAULT_PASSWORD }}" > .vault_pass
-      if: ${{ secrets.VAULT_PASSWORD != '' }}
 
     - name: Run Ansible playbook
       run: |
-        if [ -f .vault_pass ]; then
-          ansible-playbook -i inventory/production.ini site.yml --vault-password-file .vault_pass
-        else
-          ansible-playbook -i inventory/production.ini site.yml
-        fi
+        ansible-playbook -i inventory/production.ini site.yml --vault-password-file .vault_pass
       env:
         MATRIX_ADMIN_PASSWORD: ${{ secrets.MATRIX_ADMIN_PASSWORD }}
         POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}

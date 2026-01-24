@@ -2,5 +2,7 @@
 - name: Setup Matrix Messenger
   hosts: matrix_servers
   become: yes
+  vars_files:
+    - matrix_messenger/inventory/secrets.yml
   roles:
     - matrix_messenger
