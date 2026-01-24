@@ -16,14 +16,15 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
 
       - name: Install dependencies
         run: |
-          pip install molecule[docker] ansible testinfra
+          pip install --upgrade pip
+          pip install ansible molecule "molecule-plugins[docker]" testinfra ansible-lint yamllint
 
       - name: Run molecule tests
         run: |
