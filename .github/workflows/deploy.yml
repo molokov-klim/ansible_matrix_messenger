@@ -26,10 +26,9 @@ jobs:
         echo "" >> inventory/production.ini
         echo "[matrix_servers:vars]" >> inventory/production.ini
         echo "ansible_user=${{ secrets.ANSIBLE_USER }}" >> inventory/production.ini
-        echo "ansible_password=${{ secrets.ANSIBLE_PASSWORD }}" >> inventory/production.ini
         echo "ansible_become_pass=${{ secrets.ANSIBLE_PASSWORD }}" >> inventory/production.ini
         echo "ansible_connection=ssh" >> inventory/production.ini
-        echo "ansible_ssh_common_args='-o StrictHostKeyChecking=no -o PreferredAuthentications=password -o PubkeyAuthentication=no'" >> inventory/production.ini
+        echo "ansible_ssh_common_args='-o StrictHostKeyChecking=no'" >> inventory/production.ini
 
     - name: Create .env file with secrets
       run: |
@@ -38,6 +37,12 @@ jobs:
         echo "ANSIBLE_HOST=${{ secrets.ANSIBLE_HOST }}" >> .env
         echo "ANSIBLE_USER=${{ secrets.ANSIBLE_USER }}" >> .env
         echo "ANSIBLE_PASSWORD=${{ secrets.ANSIBLE_PASSWORD }}" >> .env
+
+    - name: Create SSH key file
+      run: |
+        mkdir -p ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
 
     - name: Create vault password file
       run: |
