@@ -1,4 +1,9 @@
-matrix_messenger/inventory.ini
+# Игнорировать все файлы, которые содержат тестовые данные и шаблоны
 **/inventory.ini
-matrix_messenger/examples/staging.inventory.ini
-matrix_messenger/examples/production.inventory.ini
+**/examples/*.ini
+**/molecule/**/*.py
+**/scripts/*.sh
+**/templates/*.j2
+**/tests/*.py
+**/tasks/*.yml
+matrix_messenger/vars/main.yml

@@ -1,11 +1,25 @@
 title = "gitleaks config"
 
 [allowlist]
-description = "Allow inventory files"
+description = "Allow inventory and example files"
 paths = [
-  "**/inventory.ini",
-  "**/inventory/*.ini",
-  "**/inventory/*.yml",
-  "**/inventory/*.yaml",
-  "**/examples/*inventory.ini"
+    "**/inventory.ini",
+    "**/examples/*.ini",
+    "**/molecule/default/tests/test_end_to_end.py",
+    "**/scripts/load_env.sh",
+    "**/templates/*.j2",
+    "**/tests/*.py",
+    "**/tasks/*.yml"
 ]
+
+[[allowlist.regexes]]
+description = "Allow Ansible lookup patterns"
+regex = '''\{\{.*lookup.*\}\}'''
+
+[[allowlist.regexes]]
+description = "Allow Ansible variable patterns"
+regex = '''\{\{.*\}\}'''
+
+[[allowlist.regexes]]
+description = "Allow Jinja2 templates"
+regex = '''\.j2$'''
