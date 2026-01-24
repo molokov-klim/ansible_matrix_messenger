@@ -2,18 +2,22 @@
 
 ## Причина ошибки
 
-Тесты документации в `matrix_messenger/molecule/default/tests/test_documentation.py` ищут файлы в неправильной директории. 
-Вместо корня проекта (`/home/runner/work/ansible_matrix_messenger/ansible_matrix_messenger/`) 
-они ищут файлы в поддиректории роли (`/home/runner/work/ansible_matrix_messenger/ansible_matrix_messenger/matrix_messenger/`).
+Тесты документации в `matrix_messenger/molecule/default/tests/test_documentation.py` ищут файлы в неправильной
+директории.
+Вместо корня проекта (`/home/runner/work/ansible_matrix_messenger/ansible_matrix_messenger/`)
+они ищут файлы в поддиректории роли (
+`/home/runner/work/ansible_matrix_messenger/ansible_matrix_messenger/matrix_messenger/`).
 
 ## Проблема в определении пути
 
 В тесте используется:
+
 ```python
 ROLE_ROOT = pathlib.Path(__file__).parent.parent.parent.resolve()
 ```
 
 Это приводит к:
+
 - `__file__` = `/home/runner/work/.../matrix_messenger/molecule/default/tests/test_documentation.py`
 - `.parent` = `/home/runner/work/.../matrix_messenger/molecule/default/tests/`
 - `.parent.parent` = `/home/runner/work/.../matrix_messenger/molecule/default/`
@@ -26,6 +30,7 @@ ROLE_ROOT = pathlib.Path(__file__).parent.parent.parent.resolve()
 ### Вариант 1: Использовать относительный путь от корня роли
 
 Изменить определение `ROLE_ROOT` в тесте:
+
 ```python
 # Вместо:
 ROLE_ROOT = pathlib.Path(__file__).parent.parent.parent.resolve()
@@ -35,6 +40,7 @@ ROLE_ROOT = pathlib.Path(__file__).parent.parent.parent.parent.resolve()
 ```
 
 Это даст нам:
+
 - `.parent.parent.parent.parent` = `/home/runner/work/ansible_matrix_messenger/ansible_matrix_messenger/`
 
 ### Вариант 2: Использовать переменную окружения
@@ -44,6 +50,7 @@ ROLE_ROOT = pathlib.Path(__file__).parent.parent.parent.parent.resolve()
 ### Вариант 3: Использовать фиксированный путь
 
 В тестах использовать фиксированный путь к корню проекта, например:
+
 ```python
 PROJECT_ROOT = pathlib.Path("/home/runner/work/ansible_matrix_messenger/ansible_matrix_messenger/")
 ```
@@ -53,6 +60,7 @@ PROJECT_ROOT = pathlib.Path("/home/runner/work/ansible_matrix_messenger/ansible_
 ## Рекомендуемое решение
 
 Использовать Вариант 1, так как он:
+
 - Сохраняет переносимость тестов
 - Не зависит от переменных окружения
 - Корректно работает в разных средах
@@ -68,6 +76,18 @@ PROJECT_ROOT = pathlib.Path("/home/runner/work/ansible_matrix_messenger/ansible_
 ## Дополнительные проверки
 
 После исправления пути, также нужно убедиться, что:
+
 - Все файлы документации находятся в корне проекта
 - Тесты не ищут файлы, которые не существуют
 - Тесты не зависят от внешних сервисов (как было с matrix.test)
+
+## Дополнительные требования
+
+Необходимо добавить логгирование всех констант и переменных, таких как:
+- `ROLE_ROOT` - путь к корню проекта
+- `readme_path` - путь к файлу README.md
+- `contributing_path` - путь к файлу CONTRIBUTING.md
+- `examples_dir` - путь к директории examples/
+- и другие пути к файлам и директориям
+
+Это позволит легче отлаживать тесты в случае их падения.
