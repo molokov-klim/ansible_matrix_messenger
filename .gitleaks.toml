@@ -1,0 +1,10 @@
+title = "gitleaks config"
+
+[allowlist]
+description = "Allow inventory files"
+paths = [
+  "**/inventory.ini",
+  "**/inventory/*.ini",
+  "**/inventory/*.yml",
+  "**/inventory/*.yaml"
+]

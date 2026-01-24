@@ -26,8 +26,6 @@ jobs:
         echo "" >> inventory/production.ini
         echo "[matrix_servers:vars]" >> inventory/production.ini
         echo "ansible_user=${{ secrets.ANSIBLE_USER }}" >> inventory/production.ini
-        echo "ansible_password=${{ secrets.ANSIBLE_PASSWORD }}" >> inventory/production.ini
-        echo "ansible_become_pass=${{ secrets.ANSIBLE_PASSWORD }}" >> inventory/production.ini
         echo "ansible_connection=ssh" >> inventory/production.ini
         echo "ansible_ssh_common_args='-o StrictHostKeyChecking=no'" >> inventory/production.ini
 
@@ -39,9 +37,13 @@ jobs:
         echo "ANSIBLE_USER=${{ secrets.ANSIBLE_USER }}" >> .env
         echo "ANSIBLE_PASSWORD=${{ secrets.ANSIBLE_PASSWORD }}" >> .env
 
+    - name: Create vault password file
+      run: |
+        echo "${{ secrets.VAULT_PASSWORD }}" > .vault_pass
+
     - name: Run Ansible playbook
       run: |
-        ansible-playbook -i inventory/production.ini site.yml
+        ansible-playbook -i inventory/production.ini site.yml --vault-password-file .vault_pass
       env:
         MATRIX_ADMIN_PASSWORD: ${{ secrets.MATRIX_ADMIN_PASSWORD }}
         POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
