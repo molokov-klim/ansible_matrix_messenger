@@ -1,0 +1,25 @@
+# Configuration file for Matrix Synapse
+server_name: "{{ domain_name }}"
+public_baseurl: "https://{{ domain_name }}"
+
+listeners:
+  - port: 8008
+    tls: false
+    type: http
+    x_forwarded: true
+
+database:
+  name: sqlite3
+  args:
+    database: /var/lib/matrix-synapse/homeserver.db
+
+media_store_path: /var/lib/matrix-synapse/media
+uploads_path: /var/lib/matrix-synapse/uploads
+
+registration_shared_secret: "{{ lookup('password', '/dev/null length=64 chars=ascii_letters,digits') }}"
+
+macaroon_secret_key: "{{ lookup('password', '/dev/null length=64 chars=ascii_letters,digits') }}"
+
+form_secret: "{{ lookup('password', '/dev/null length=64 chars=ascii_letters,digits') }}"
+
+report_stats: false

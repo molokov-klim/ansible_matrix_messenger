@@ -1,0 +1,6 @@
+---
+# handlers file for matrix_messenger
+- name: Restart Synapse
+  systemd:
+    name: matrix-synapse
+    state: restarted

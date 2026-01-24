@@ -1,2 +1,3 @@
 ---
 # tasks file for matrix_messenger
+- import_tasks: install_synapse.yml
