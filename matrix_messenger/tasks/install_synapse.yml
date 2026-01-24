@@ -17,8 +17,7 @@
     repo: deb [signed-by=/etc/apt/trusted.gpg.d/matrix-org-archive-keyring.gpg] https://packages.matrix.org/debian/ {{ ansible_distribution_release }} main
     state: present
     filename: matrix-org
-    codename: "{{ ansible_distribution_release }}"
-    dist: "{{ ansible_distribution_release }}"
+    update_cache: yes
 
 - name: Install Matrix Synapse
   apt:
