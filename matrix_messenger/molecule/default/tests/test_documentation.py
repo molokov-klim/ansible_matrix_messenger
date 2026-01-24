@@ -1,8 +1,10 @@
 import os
 import pathlib
 
-# Определяем путь к корню роли (matrix_messenger/)
-ROLE_ROOT = pathlib.Path(__file__).parent.parent.parent.resolve()
+# Определяем путь к корню роли (ansible_matrix_messenger/)
+# __file__ = .../matrix_messenger/molecule/default/tests/test_documentation.py
+# parent.parent.parent.parent = .../ansible_matrix_messenger/
+ROLE_ROOT = pathlib.Path(__file__).parent.parent.parent.parent.resolve()
 
 def test_readme_exists():
     # Проверяем, что файл README.md существует в корне роли
