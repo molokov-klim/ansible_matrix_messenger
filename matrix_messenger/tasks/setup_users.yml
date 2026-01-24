@@ -1,0 +1,24 @@
+---
+# tasks/setup_users.yml
+- name: Create admin user
+  command: >
+    register_new_matrix_user
+    -u {{ admin_username | default('admin') }}
+    -p {{ lookup('env', 'MATRIX_ADMIN_PASSWORD') | default('default_admin_password') }}
+    --admin
+    http://localhost:8008
+  args:
+    creates: "/var/lib/matrix-synapse/{{ admin_username | default('admin') }}_created"
+  register: admin_user_creation
+  failed_when: admin_user_creation.rc != 0 and "already exists" not in admin_user_creation.stderr
+
+- name: Create regular users
+  command: >
+    register_new_matrix_user
+    -u {{ item.username }}
+    -p {{ item.password }}
+    http://localhost:8008
+  loop: "{{ family_users | default([]) }}"
+  when: item.password is defined
+  args:
+    creates: "/var/lib/matrix-synapse/{{ item.username }}_created"

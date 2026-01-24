@@ -1,0 +1,36 @@
+---
+# tasks/setup_security.yml
+- name: Disable public registration
+  lineinfile:
+    path: /etc/matrix-synapse/homeserver.yaml
+    regexp: '^enable_registration:'
+    line: 'enable_registration: false'
+    backup: yes
+  notify: Restart Synapse
+
+- name: Restrict federation to trusted domains only
+  blockinfile:
+    path: /etc/matrix-synapse/homeserver.yaml
+    block: |
+      # Whitelist for federation - only allow connections from these domains
+      federation_domain_whitelist:
+        - "{{ domain_name }}"
+    marker: "# {mark} FEDERATION WHITELIST"
+    insertafter: EOF
+  notify: Restart Synapse
+
+- name: Configure rate limiting
+  lineinfile:
+    path: /etc/matrix-synapse/homeserver.yaml
+    regexp: '^  per_second:'
+    line: '  per_second: 0.17'  # ~10 requests per minute
+    backup: yes
+  notify: Restart Synapse
+
+- name: Increase burst count for rate limiting
+  lineinfile:
+    path: /etc/matrix-synapse/homeserver.yaml
+    regexp: '^  burst_count:'
+    line: '  burst_count: 10'
+    backup: yes
+  notify: Restart Synapse
