@@ -1,0 +1,49 @@
+name: Deploy to Production
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        pip install ansible
+
+    - name: Create inventory file
+      run: |
+        mkdir -p inventory
+        echo "[matrix_servers]" > inventory/production.ini
+        echo "${{ secrets.ANSIBLE_HOST }}" >> inventory/production.ini
+        echo "" >> inventory/production.ini
+        echo "[matrix_servers:vars]" >> inventory/production.ini
+        echo "ansible_user=${{ secrets.ANSIBLE_USER }}" >> inventory/production.ini
+        echo "ansible_password=${{ secrets.ANSIBLE_PASSWORD }}" >> inventory/production.ini
+        echo "ansible_connection=ssh" >> inventory/production.ini
+        echo "ansible_ssh_common_args='-o StrictHostKeyChecking=no'" >> inventory/production.ini
+
+    - name: Create .env file with secrets
+      run: |
+        echo "MATRIX_ADMIN_PASSWORD=${{ secrets.MATRIX_ADMIN_PASSWORD }}" > .env
+        echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
+        echo "ANSIBLE_HOST=${{ secrets.ANSIBLE_HOST }}" >> .env
+        echo "ANSIBLE_USER=${{ secrets.ANSIBLE_USER }}" >> .env
+        echo "ANSIBLE_PASSWORD=${{ secrets.ANSIBLE_PASSWORD }}" >> .env
+
+    - name: Run Ansible playbook
+      run: |
+        ansible-playbook -i inventory/production.ini site.yml
+      env:
+        MATRIX_ADMIN_PASSWORD: ${{ secrets.MATRIX_ADMIN_PASSWORD }}
+        POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+        ANSIBLE_HOST: ${{ secrets.ANSIBLE_HOST }}
+        ANSIBLE_USER: ${{ secrets.ANSIBLE_USER }}
+        ANSIBLE_PASSWORD: ${{ secrets.ANSIBLE_PASSWORD }}
