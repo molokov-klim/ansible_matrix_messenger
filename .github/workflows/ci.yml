@@ -25,10 +25,16 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install ansible molecule "molecule-plugins[docker]" testinfra ansible-lint yamllint
+          
+      - name: Install Ansible collections
+        run: |
+          ansible-galaxy collection install community.docker
 
       - name: Run molecule tests
         run: |
           cd matrix_messenger
+          echo "=== DESTROY (clean state) ==="
+          molecule destroy || true
           echo "=== CREATE ==="
           molecule create
           echo "=== CONVERGE ==="
