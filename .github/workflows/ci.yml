@@ -20,6 +20,11 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Set up Docker
+        uses: docker/setup-docker-action@v1
+        with:
+          version: '20.10.24'
+
       - name: Install dependencies
         run: |
           pip install molecule[docker] ansible testinfra
