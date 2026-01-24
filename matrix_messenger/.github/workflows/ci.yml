@@ -1,0 +1,41 @@
+name: CI Pipeline
+
+on: [push, pull_request]
+
+jobs:
+  security-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check for secrets in code
+        run: |
+          # Проверяем, что в коде нет секретов
+          git grep -iE '(password|secret|key|token|ANSIBLE_PASSWORD|MATRIX_ADMIN_PASSWORD|POSTGRES_PASSWORD)' \
+            -- ':!tests' ':!scripts' ':!.github' ':!.env.example' && exit 1 || exit 0
+
+  test:
+    needs: security-check
+    runs-on: ubuntu-latest
+    # Для тестов используем тестовые значения
+    env:
+      ANSIBLE_HOST: localhost
+      ANSIBLE_USER: root
+      ANSIBLE_PASSWORD: test_password
+      MATRIX_ADMIN_PASSWORD: test_admin_pass
+      POSTGRES_PASSWORD: test_db_pass
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install molecule[docker] ansible testinfra
+
+      - name: Run molecule tests
+        run: |
+          molecule test
