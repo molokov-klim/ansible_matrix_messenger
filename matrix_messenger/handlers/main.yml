@@ -4,3 +4,13 @@
   systemd:
     name: matrix-synapse
     state: restarted
+
+- name: Reload Nginx
+  systemd:
+    name: nginx
+    state: reloaded
+
+- name: Restart PostgreSQL
+  systemd:
+    name: postgresql
+    state: restarted

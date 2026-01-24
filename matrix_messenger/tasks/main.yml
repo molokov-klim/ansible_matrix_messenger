@@ -3,3 +3,6 @@
 - import_tasks: install_synapse.yml
 - import_tasks: setup_postgres.yml
 - import_tasks: integrate_postgres_with_synapse.yml
+- import_tasks: setup_nginx.yml
+- import_tasks: setup_ssl.yml
+- import_tasks: configure_nginx_proxy.yml
