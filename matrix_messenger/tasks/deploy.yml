@@ -1,0 +1,25 @@
+---
+# tasks/deploy.yml
+- name: Ensure deployment directory exists
+  file:
+    path: /opt/matrix-deployment
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Copy deployment scripts
+  template:
+    src: deploy_script.sh.j2
+    dest: /opt/matrix-deployment/deploy.sh
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Create deployment configuration
+  template:
+    src: deployment_config.yml.j2
+    dest: /opt/matrix-deployment/config.yml
+    owner: root
+    group: root
+    mode: '0644'

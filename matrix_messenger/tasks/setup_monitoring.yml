@@ -1,0 +1,31 @@
+---
+# tasks/setup_monitoring.yml
+- name: Install Prometheus Node Exporter
+  apt:
+    name: prometheus-node-exporter
+    state: present
+
+- name: Start and enable Prometheus Node Exporter
+  systemd:
+    name: prometheus-node-exporter
+    state: started
+    enabled: yes
+
+- name: Configure Synapse metrics
+  lineinfile:
+    path: /etc/matrix-synapse/homeserver.yaml
+    regexp: '^enable_metrics:'
+    line: 'enable_metrics: true'
+    backup: yes
+  notify: Restart Synapse
+
+- name: Install and configure Fail2Ban
+  apt:
+    name: fail2ban
+    state: present
+
+- name: Start and enable Fail2Ban
+  systemd:
+    name: fail2ban
+    state: started
+    enabled: yes

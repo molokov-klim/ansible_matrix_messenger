@@ -8,3 +8,6 @@
 - import_tasks: configure_nginx_proxy.yml
 - import_tasks: setup_users.yml
 - import_tasks: setup_security.yml
+- import_tasks: deploy.yml
+- import_tasks: setup_monitoring.yml
+- import_tasks: backup.yml
