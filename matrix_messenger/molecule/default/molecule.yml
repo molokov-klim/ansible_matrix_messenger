@@ -6,20 +6,33 @@ platforms:
   - name: matrix-test
     image: geerlingguy/docker-ubuntu2204-ansible:latest
     pre_build_image: true
+    privileged: true
+    command: /lib/systemd/systemd
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
     groups:
       - matrix_servers
 provisioner:
   name: ansible
+  env:
+    ANSIBLE_HOST: "localhost"
+    ANSIBLE_USER: "root"
+    ANSIBLE_PASSWORD: "test_password"
+    MATRIX_ADMIN_PASSWORD: "test_admin_pass"
+    MATRIX_ADMIN_USERNAME: "admin"
+    POSTGRES_PASSWORD: "test_db_pass"
   inventory:
     group_vars:
       matrix_servers:
         ansible_user: root
         domain_name: "matrix.test"
         admin_username: "admin"
+        admin_email: "admin@test.com"
         matrix_db_name: "synapse"
         matrix_db_user: "synapse_user"
         matrix_db_password: "test_db_password"
-        admin_email: "admin@test.com"
+        matrix_port: 8008
+        nginx_port: 80
 verifier:
   name: testinfra
 scenario:

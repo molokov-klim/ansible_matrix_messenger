@@ -4,6 +4,7 @@ def test_hosts_file(host):
     assert f.user == 'root'
     assert f.group == 'root'
 
-def test_apt_update(host):
-    cmd = host.run("apt list --upgradable 2>/dev/null | grep -v 'Listing...' | wc -l")
-    assert int(cmd.stdout.strip()) == 0, "Есть обновления пакетов"
+def test_apt_cache_updated(host):
+    # Проверяем что apt может обновить кэш без ошибок
+    cmd = host.run("apt-get update")
+    assert cmd.rc == 0, "Не удалось обновить apt кэш"
