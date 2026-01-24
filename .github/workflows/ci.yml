@@ -26,4 +26,5 @@ jobs:
 
       - name: Run molecule tests
         run: |
+          cd matrix_messenger
           molecule test
