@@ -1,5 +1,10 @@
 ---
 # tasks/setup_ssl.yml
+- name: Install Cron
+  apt:
+    name: cron
+    state: present
+
 - name: Install Certbot and Nginx plugin
   apt:
     name:
