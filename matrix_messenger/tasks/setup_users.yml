@@ -3,10 +3,10 @@
 - name: Create admin user
   command: >
     register_new_matrix_user
+    -c /etc/matrix-synapse/homeserver.yaml
     -u admin
     -p {{ lookup('env', 'MATRIX_ADMIN_PASSWORD') | default('default_admin_password') }}
     --admin
-    http://localhost:8008
   args:
     creates: "/var/lib/matrix-synapse/admin_created"
   register: admin_user_creation
