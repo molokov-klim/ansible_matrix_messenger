@@ -25,6 +25,11 @@
     state: present
     update_cache: yes
 
+- name: Ensure matrix-synapse group exists
+  group:
+    name: matrix-synapse
+    state: present
+
 - name: Configure Synapse server name
   template:
     src: homeserver.yaml.j2
