@@ -25,12 +25,20 @@
     state: present
     update_cache: yes
 
+- name: Create matrix-synapse system user and group
+  user:
+    name: matrix-synapse
+    system: yes
+    create_home: no
+    shell: /bin/false
+    state: present
+
 - name: Configure Synapse server name
   template:
     src: homeserver.yaml.j2
     dest: /etc/matrix-synapse/homeserver.yaml
     owner: root
-    group: root
+    group: matrix-synapse
     mode: '0644'
   notify: Restart Synapse
 
