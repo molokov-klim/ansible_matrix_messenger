@@ -25,3 +25,10 @@
   systemd:
     name: postgresql
     state: restarted
+
+- name: Wait for PostgreSQL to be ready after restart
+  wait_for:
+    host: localhost
+    port: 5432
+    delay: 10
+    timeout: 60

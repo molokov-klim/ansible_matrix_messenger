@@ -1,0 +1,11 @@
+---
+namespace: molokov_klim
+name: matrix_messenger
+version: 0.2.0
+readme: README.md
+authors:
+  - molokov-klim
+description: Ansible role for setting up a private Matrix messenger for family use
+license:
+  - GPL-3.0-or-later
+dependencies: {}

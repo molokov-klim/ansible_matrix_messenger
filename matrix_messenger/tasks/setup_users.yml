@@ -1,5 +1,30 @@
 ---
 # tasks/setup_users.yml
+- name: Gather system information before connecting
+  setup:
+  register: system_facts
+
+- name: Log system resources
+  debug:
+    msg: "System Info - Memory: {{ (system_facts.ansible_memtotal_mb / 1024) | round(2) }} GB, CPU: {{ system_facts.ansible_processor_vcpus }} cores"
+  when: system_facts is defined
+
+- name: Check system resources
+  command: sh -c "df -h / | awk 'NR==2 {print $5}' | cut -d'%' -f1"
+  register: disk_usage
+  changed_when: false
+
+- name: Check resource usage
+  debug:
+    msg: "Disk usage: {{ disk_usage.stdout }}%, Memory: {{ (system_facts.ansible_memtotal_mb / 1024) | round(2) }} GB, CPU: {{ system_facts.ansible_processor_vcpus }} cores"
+  when: system_facts is defined
+
+- name: Check Synapse service status
+  systemd:
+    name: matrix-synapse
+    state: started
+    daemon_reload: yes
+
 - name: Wait for Synapse service to be running
   systemd:
     name: matrix-synapse
@@ -9,11 +34,54 @@
   delay: 10
 
 - name: Wait for Synapse to be ready
-  wait_for:
-    host: localhost
-    port: 8008
-    delay: 30
-    timeout: 300
+  uri:
+    url: http://localhost:8008/_matrix/client/versions
+    method: GET
+    status_code: 200
+    timeout: 30
+  register: synapse_health
+  retries: 10
+  delay: 30
+  until: synapse_health is succeeded or synapse_health.status == 200
+
+- name: Check Synapse logs for errors
+  command: journalctl -u matrix-synapse --no-pager --lines 20
+  register: synapse_logs
+  changed_when: false
+  failed_when: false
+
+- name: Display Synapse logs
+  debug:
+    var: synapse_logs.stdout_lines
+  when: synapse_logs is defined
+
+- name: Check if server_name.yaml exists
+  stat:
+    path: /var/lib/matrix-synapse/server_name.yaml
+  register: server_name_file
+
+- name: Create server_name.yaml if missing
+  copy:
+    content: |
+      # This file contains the server name for Matrix Synapse
+      # Generated automatically during setup
+      server_name: "{{ domain_name }}"
+    dest: /var/lib/matrix-synapse/server_name.yaml
+    owner: matrix-synapse
+    group: matrix-synapse
+    mode: '0644'
+  when: not server_name_file.stat.exists
+
+- name: Check PostgreSQL configuration in homeserver.yaml
+  command: grep -i "database" /etc/matrix-synapse/homeserver.yaml
+  register: db_config
+  changed_when: false
+  failed_when: false
+
+- name: Display database configuration
+  debug:
+    var: db_config.stdout_lines
+  when: db_config is defined and db_config.rc == 0
 
 - name: Create admin user
   command: >
