@@ -6,7 +6,7 @@
 
 - name: Log system resources
   debug:
-    msg: "System Info - Memory: {{ (system_facts.ansible_memtotal_mb / 1024) | round(2) }} GB, CPU: {{ system_facts.ansible_processor_vcpus }} cores"
+    msg: "System Info - Memory: {{ (system_facts.ansible_facts.ansible_memtotal_mb / 1024) | round(2) }} GB, CPU: {{ system_facts.ansible_facts.ansible_processor_vcpus }} cores"
   when: system_facts is defined
 
 - name: Check system resources
@@ -16,7 +16,7 @@
 
 - name: Check resource usage
   debug:
-    msg: "Disk usage: {{ disk_usage.stdout }}%, Memory: {{ (system_facts.ansible_memtotal_mb / 1024) | round(2) }} GB, CPU: {{ system_facts.ansible_processor_vcpus }} cores"
+    msg: "Disk usage: {{ disk_usage.stdout }}%, Memory: {{ (system_facts.ansible_facts.ansible_memtotal_mb / 1024) | round(2) }} GB, CPU: {{ system_facts.ansible_facts.ansible_processor_vcpus }} cores"
   when: system_facts is defined
 
 - name: Check Synapse service status
