@@ -3,12 +3,12 @@
 - name: Create admin user
   command: >
     register_new_matrix_user
-    -u {{ admin_username | default('admin') }}
+    -u admin
     -p {{ lookup('env', 'MATRIX_ADMIN_PASSWORD') | default('default_admin_password') }}
     --admin
     http://localhost:8008
   args:
-    creates: "/var/lib/matrix-synapse/{{ admin_username | default('admin') }}_created"
+    creates: "/var/lib/matrix-synapse/admin_created"
   register: admin_user_creation
   failed_when: admin_user_creation.rc != 0 and "already exists" not in admin_user_creation.stderr
 
