@@ -33,16 +33,25 @@
   retries: 5
   delay: 10
 
+- name: Wait a bit for Synapse to initialize
+  pause:
+    seconds: 60
+
+- name: Check Synapse process is running
+  systemd:
+    name: matrix-synapse
+    state: started
+
 - name: Wait for Synapse to be ready
   uri:
     url: http://localhost:8008/_matrix/client/versions
     method: GET
     status_code: 200
-    timeout: 60
+    timeout: 30
   register: synapse_health
-  retries: 10
-  delay: 30
-  until: synapse_health is succeeded or synapse_health.status == 200
+  retries: 20
+  delay: 15
+  until: synapse_health is succeeded and synapse_health.status == 200
 
 - name: Check Synapse logs for errors
   command: journalctl -u matrix-synapse --no-pager --lines 20
