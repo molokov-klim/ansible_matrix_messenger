@@ -40,7 +40,7 @@
     status_code: 200
     timeout: 60
   register: synapse_health
-  retries: 20
+  retries: 10
   delay: 30
   until: synapse_health is succeeded or synapse_health.status == 200
 
