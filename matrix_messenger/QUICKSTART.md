@@ -82,11 +82,11 @@ POSTGRES_PASSWORD=еще_один_надежный_пароль
 После успешного деплоя:
 
 1. **Подключись к серверу:**
-   - Открой в браузере: `https://matrix.molokov`
+   - Открой в браузере: `https://matrix.molokovklim.ru`
    - Или используй клиент Element: https://element.io
 
 2. **Войди как админ:**
-   - Логин: `@admin:matrix.molokov`
+   - Логин: `@admin:matrix.molokovklim.ru`
    - Пароль: тот что указал в `MATRIX_ADMIN_PASSWORD`
 
 3. **Создай пользователей:**

@@ -2,7 +2,7 @@
 # Замените на IP адрес или hostname вашего сервера
 # Примеры:
 #   192.168.1.100
-#   matrix.molokov
+#   matrix.molokovklim.ru
 #   your-server.com
 localhost
 

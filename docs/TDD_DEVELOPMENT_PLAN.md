@@ -75,7 +75,7 @@
    ```yaml
    # group_vars/matrix_servers.yml (МОЖНО КОММИТИТЬ)
    # Домен
-   domain_name: "matrix.molokov"
+   domain_name: "matrix.molokovklim.ru"
 
    # Email для восстановления
    admin_email: "ultrakawaii9654449192@gmail.com"
@@ -202,7 +202,7 @@
    # defaults/main.yml
    ---
    # Эти настройки можно хранить в git
-   domain_name: "matrix.molokov"
+   domain_name: "matrix.molokovklim.ru"
    admin_email: "ultrakawaii9654449192@gmail.com"
    
    # Технические настройки
