@@ -19,12 +19,20 @@
     filename: matrix-org
     update_cache: yes
 
-- name: Create matrix-synapse system user and group
+- name: Create matrix-synapse system GROUP
+  group:
+    name: matrix-synapse
+    system: yes
+    state: present
+
+- name: Create matrix-synapse system USER
   user:
     name: matrix-synapse
     system: yes
     create_home: no
     shell: /bin/false
+    groups: matrix-synapse
+    append: yes
     state: present
 
 - name: Install Matrix Synapse
