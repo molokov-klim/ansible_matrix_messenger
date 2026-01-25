@@ -1,11 +1,19 @@
 ---
 # tasks/setup_users.yml
+- name: Wait for Synapse service to be running
+  systemd:
+    name: matrix-synapse
+    state: started
+    daemon_reload: yes
+  retries: 5
+  delay: 10
+
 - name: Wait for Synapse to be ready
   wait_for:
     host: localhost
     port: 8008
-    delay: 10
-    timeout: 60
+    delay: 30
+    timeout: 300
 
 - name: Create admin user
   command: >
