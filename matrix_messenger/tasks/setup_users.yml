@@ -1,5 +1,12 @@
 ---
 # tasks/setup_users.yml
+- name: Wait for Synapse to be ready
+  wait_for:
+    host: localhost
+    port: 8008
+    delay: 10
+    timeout: 60
+
 - name: Create admin user
   command: >
     register_new_matrix_user
