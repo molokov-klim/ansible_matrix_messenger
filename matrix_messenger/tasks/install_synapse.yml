@@ -19,12 +19,6 @@
     filename: matrix-org
     update_cache: yes
 
-- name: Install Matrix Synapse
-  apt:
-    name: matrix-synapse
-    state: present
-    update_cache: yes
-
 - name: Create matrix-synapse system user and group
   user:
     name: matrix-synapse
@@ -32,6 +26,12 @@
     create_home: no
     shell: /bin/false
     state: present
+
+- name: Install Matrix Synapse
+  apt:
+    name: matrix-synapse
+    state: present
+    update_cache: yes
 
 - name: Configure Synapse server name
   template:
