@@ -34,6 +34,25 @@
     mode: '0644'
   notify: Restart Synapse
 
+- name: Ensure correct ownership for Matrix Synapse directories
+  file:
+    path: /var/lib/matrix-synapse
+    owner: matrix-synapse
+    group: matrix-synapse
+    recurse: yes
+    state: directory
+
+- name: Ensure media and uploads directories exist
+  file:
+    path: "{{ item }}"
+    owner: matrix-synapse
+    group: matrix-synapse
+    mode: '0755'
+    state: directory
+  loop:
+    - /var/lib/matrix-synapse/media
+    - /var/lib/matrix-synapse/uploads
+
 - name: Start and enable Matrix Synapse
   systemd:
     name: matrix-synapse
