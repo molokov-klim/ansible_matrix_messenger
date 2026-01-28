@@ -7,6 +7,9 @@ listeners:
     tls: false
     type: http
     x_forwarded: true
+    resources:
+      - names: [client, federation]
+        compress: false
 
 database:
   name: psycopg2
