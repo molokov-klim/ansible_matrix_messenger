@@ -44,7 +44,7 @@
 
 - name: Wait for Synapse to be ready
   uri:
-    url: http://localhost:8008/_matrix/client/versions
+    url: http://localhost:8008/health
     method: GET
     status_code: 200
     timeout: 30
