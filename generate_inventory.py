@@ -1,21 +1,32 @@
 #!/usr/bin/env python3
 """
-Script to generate inventory.ini from template and .env.yml variables
+Script to generate inventory.ini from template and environment variables
 """
 
-import yaml
 import os
 from jinja2 import Template
 
 def load_env_vars():
-    """Load variables from .env.yml file"""
-    with open('.env.yml', 'r') as f:
-        return yaml.safe_load(f)
+    """Load variables from environment variables"""
+    return {
+        'server_ip': os.environ.get('SERVER_IP'),
+        'ansible_user': os.environ.get('ANSIBLE_USER'),
+        'ansible_ssh_private_key_path': os.environ.get('ANSIBLE_SSH_PRIVATE_KEY_PATH', '~/.ssh/id_rsa')
+    }
 
 def generate_inventory():
     """Generate inventory.ini from template"""
     # Load environment variables
     env_vars = load_env_vars()
+    
+    # Check if required variables are set and not empty
+    missing_vars = []
+    for var_name, var_value in env_vars.items():
+        if var_value is None or var_value.strip() == "":
+            missing_vars.append(var_name)
+    
+    if missing_vars:
+        raise ValueError(f"The following environment variables are not set or are empty: {', '.join(missing_vars)}")
     
     # Read the template
     with open('inventory.ini.j2', 'r') as f:

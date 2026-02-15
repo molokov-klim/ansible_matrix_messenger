@@ -28,11 +28,12 @@ jobs:
 
     - name: Generate inventory
       run: |
-        echo "server_ip=${{ secrets.SERVER_IP }}" > .env.local
-        echo "ansible_user=${{ secrets.ANSIBLE_USER }}" >> .env.local
-        echo "ansible_ssh_private_key_path=~/.ssh/id_rsa" >> .env.local
-        # Add other variables as needed
         python generate_inventory.py
+      env:
+        SERVER_IP: ${{ secrets.SERVER_IP }}
+        ANSIBLE_USER: ${{ secrets.ANSIBLE_USER }}
+        ANSIBLE_SSH_PRIVATE_KEY_PATH: ~/.ssh/id_rsa
+        # Add other variables as needed
 
     - name: Run Ansible playbook
       run: |

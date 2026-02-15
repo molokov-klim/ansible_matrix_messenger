@@ -22,11 +22,13 @@ pip install -r requirements.txt
 ```
 
 ### 3. Configure environment variables
-Update the `.env.yml` file with your specific values:
-- `ansible_user`: Your server username
-- `server_ip`: Your server IP address
-- `ansible_ssh_private_key_path`: Path to your SSH private key
+Set the required environment variables with your specific values:
+- `ANSIBLE_USER`: Your server username
+- `SERVER_IP`: Your server IP address
+- `ANSIBLE_SSH_PRIVATE_KEY_PATH`: Path to your SSH private key
 - Other variables as needed
+
+For local development, you can use a .env file loader or export variables directly in your shell.
 
 ### 4. Generate inventory file
 Run the following command to generate the inventory.ini file from the template:
@@ -57,9 +59,8 @@ Example GitHub Actions step:
 ```
 
 ## Files Description
-- `.env.yml`: Contains environment variables (credentials, server info, etc.)
 - `inventory.ini.j2`: Jinja2 template for inventory file
-- `generate_inventory.py`: Script to generate inventory from template and variables
+- `generate_inventory.py`: Script to generate inventory from template and environment variables
 - `ansible.cfg`: Ansible configuration file
 - `playbooks/initial_setup.yml`: Main playbook for initial server setup
 - `group_vars/`, `host_vars/`, `roles/`: Standard Ansible directories for future expansion

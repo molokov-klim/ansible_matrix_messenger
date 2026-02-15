@@ -4,8 +4,12 @@
 - name: Initial server setup for Ubuntu 22.04
   hosts: ubuntu_servers
   become: yes
-  vars_files:
-    - ../.env.yml  # Load variables from .env file
+  vars:
+    # Load variables from environment variables
+    db_user: "{{ lookup('env', 'DB_USER') | default('postgres') }}"
+    db_password: "{{ lookup('env', 'DB_PASSWORD') | default('') }}"
+    db_host: "{{ lookup('env', 'DB_HOST') | default('localhost') }}"
+    db_name: "{{ lookup('env', 'DB_NAME') | default('') }}"
 
   tasks:
     - name: Update apt cache
