@@ -1,5 +1,9 @@
 name: Deploy to Server
 
+# Ansible deployment workflow for Matrix Messenger
+# All deployments must happen through this CI/CD pipeline
+# No local execution is intended or supported
+
 on:
   push:
     branches: [ main ]
@@ -25,6 +29,8 @@ jobs:
       uses: webfactory/ssh-agent@v0.8.0
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      env:
+        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
     - name: Generate inventory
       run: |
@@ -37,6 +43,7 @@ jobs:
 
     - name: Run Ansible playbook
       run: |
-        ansible-playbook -i inventory.ini playbooks/initial_setup.yml
+        ansible-playbook --connection=ssh --timeout=60 -i inventory.ini playbooks/initial_setup.yml
       env:
         ANSIBLE_HOST_KEY_CHECKING: false
+        ANSIBLE_SSH_ARGS: -o ControlMaster=no

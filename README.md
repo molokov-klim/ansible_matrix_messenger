@@ -36,27 +36,16 @@ Run the following command to generate the inventory.ini file from the template:
 python generate_inventory.py
 ```
 
-### 5. Run the playbook
-Execute the initial setup playbook:
-```bash
-ansible-playbook -i inventory.ini playbooks/initial_setup.yml
-```
+### 5. Запуск через CI/CD
+Плейбук запускается автоматически через GitHub Actions при пуше в ветку main.
 
 ## CI/CD Configuration
-For use in GitHub Actions or other CI/CD pipelines:
-1. Store sensitive variables in GitHub Secrets
-2. Pass secrets as environment variables during playbook execution
-3. Use the same `generate_inventory.py` script to generate inventory from environment variables
+Для использования в GitHub Actions или других CI/CD системах:
+1. Сохраните чувствительные переменные в GitHub Secrets
+2. Передавайте секреты как переменные окружения во время выполнения плейбука
+3. Используйте скрипт `generate_inventory.py` для генерации inventory из переменных окружения
 
-Example GitHub Actions step:
-```yaml
-- name: Generate inventory
-  run: |
-    echo "server_ip=${{ secrets.SERVER_IP }}" >> .env.local
-    echo "ansible_user=${{ secrets.ANSIBLE_USER }}" >> .env.local
-    # Add other variables as needed
-    python generate_inventory.py
-```
+ВАЖНО: Все запуски плейбуков должны происходить исключительно через CI/CD pipeline, локальный запуск не предусмотрен.
 
 ## Files Description
 - `inventory.ini.j2`: Jinja2 template for inventory file
@@ -69,3 +58,6 @@ Example GitHub Actions step:
 - Do not commit `.env.yml` or `inventory.ini` to version control
 - Use Ansible Vault for encrypting sensitive data in production environments
 - Ensure proper SSH key permissions (typically 600)
+
+## Setup Instructions
+See [SETUP_INSTRUCTIONS.md](SETUP_INSTRUCTIONS.md) for detailed instructions on how to set up both the server-side and environment variables.
