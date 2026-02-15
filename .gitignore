@@ -14,3 +14,5 @@ inventory.ini
 
 # Secrets and sensitive data
 secrets/
+.venv
+.idea
