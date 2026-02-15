@@ -10,8 +10,7 @@ def load_env_vars():
     """Load variables from environment variables"""
     return {
         'server_ip': os.environ.get('SERVER_IP'),
-        'ansible_user': os.environ.get('ANSIBLE_USER'),
-        'ansible_ssh_private_key_path': os.environ.get('ANSIBLE_SSH_PRIVATE_KEY_PATH', '~/.ssh/id_rsa')
+        'ansible_user': os.environ.get('ANSIBLE_USER')
     }
 
 def generate_inventory():

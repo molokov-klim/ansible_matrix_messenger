@@ -29,8 +29,6 @@ jobs:
       uses: webfactory/ssh-agent@v0.8.0
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-      env:
-        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
 
     - name: Generate inventory
       run: |
@@ -38,7 +36,7 @@ jobs:
       env:
         SERVER_IP: ${{ secrets.SERVER_IP }}
         ANSIBLE_USER: ${{ secrets.ANSIBLE_USER }}
-        ANSIBLE_SSH_PRIVATE_KEY_PATH: ~/.ssh/id_rsa
+        # The SSH key is handled by the ssh-agent action
         # Add other variables as needed
 
     - name: Run Ansible playbook
@@ -46,4 +44,4 @@ jobs:
         ansible-playbook --connection=ssh --timeout=60 -i inventory.ini playbooks/initial_setup.yml
       env:
         ANSIBLE_HOST_KEY_CHECKING: false
-        ANSIBLE_SSH_ARGS: -o ControlMaster=no
+        ANSIBLE_SSH_ARGS: -o ControlMaster=no -o IdentitiesOnly=yes
