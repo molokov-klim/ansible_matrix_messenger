@@ -1,0 +1,46 @@
+---
+# Ansible Playbook for Initial Server Setup on Ubuntu 22.04
+
+- name: Initial server setup for Ubuntu 22.04
+  hosts: ubuntu_servers
+  become: yes
+  vars_files:
+    - ../.env.yml  # Load variables from .env file
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      register: apt_update_result
+
+    - name: Handle apt update failure (Ubuntu specific)
+      debug:
+        msg: "Note: Sometimes apt update fails due to minor hash mismatches, continuing anyway"
+      when: apt_update_result is failed
+
+    - name: Upgrade all packages to the latest version
+      apt:
+        upgrade: dist
+        force_apt_get: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - net-tools
+          - python3-dev
+          - python3-pip
+          - libpq-dev
+          - mc
+          - aptitude
+          - htop
+          - apache2-utils
+          - lsb-release
+          - wget
+          - apt-transport-https
+        state: present
+        update_cache: yes
+
+    - name: Install psycopg2 via pip
+      pip:
+        name: psycopg2
+        executable: pip3

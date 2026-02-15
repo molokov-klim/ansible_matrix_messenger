@@ -1,8 +1,0 @@
----
-# Эти настройки можно хранить в git
-domain_name: "matrix.molokovklim.ru"
-admin_email: "ultrakawaii9654449192@gmail.com"
-
-# Технические настройки
-matrix_port: 8008
-nginx_port: 80
