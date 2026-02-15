@@ -6,5 +6,4 @@ ansible_python_interpreter=/usr/bin/python3
 [ubuntu_servers]
 matrix_server ansible_host={{ server_ip }} ansible_user={{ ansible_user }}
 
-[ubuntu_servers:vars]
 # SSH key is managed by ssh-agent in GitHub Actions
